@@ -239,6 +239,10 @@ pub struct Resources<Pins> {
     pub lpi2c1: ral::lpi2c::LPI2C1,
     /// The register block for [`Lpi2c3`].
     pub lpi2c3: ral::lpi2c::LPI2C3,
+    /// The register blocks for [`Lpspi1`].
+    pub lpspi1: ral::lpspi::LPSPI1,
+    /// The register blocks for [`Lpspi2`].
+    pub lpspi2: ral::lpspi::LPSPI2,
     /// The register blocks for [`Lpspi3`].
     pub lpspi3: ral::lpspi::LPSPI3,
     /// The register block for [`Lpspi4`].
@@ -255,6 +259,10 @@ pub struct Resources<Pins> {
     pub lpuart8: ral::lpuart::LPUART8,
     /// The register block for [`Lpuart1`].
     pub lpuart1: ral::lpuart::LPUART1,
+    /// The register block for [`Lpuart5`].
+    pub lpuart5: ral::lpuart::LPUART5,
+    /// The register block for [`Lpuart7`].
+    pub lpuart7: ral::lpuart::LPUART7,
     /// FlexPWM1 components.
     pub flexpwm1: (hal::flexpwm::Pwm<1>, hal::flexpwm::Submodules<1>),
     /// FlexPWM2 components.
@@ -360,6 +368,26 @@ pub type Lpi2c1 = hal::lpi2c::Lpi2c<hal::lpi2c::Pins<pins::common::P19, pins::co
 ///
 /// Use [`lpi2c`] to create this driver.
 pub type Lpi2c3 = hal::lpi2c::Lpi2c<hal::lpi2c::Pins<pins::common::P16, pins::common::P17>, 3>;
+
+/// LPSPI1 peripheral.
+///
+/// - SDO:  GPIO_SD_B0_02 (p43) or GPIO_EMC_28 (p50)
+/// - SDI:  GPIO_SD_B0_03 (p42) or GPIO_EMC_29 (p54)
+/// - SCK:  GPIO_SD_B0_00 (p45) or GPIO_EMC_27 (p49)
+/// - PCS0: GPIO_SD_B0_01 (p44) or GPIO_EMC_30
+///
+/// Use [`lpspi`] to create this driver.
+pub type Lpspi1<SDO, SDI, SCK, PCS0> = hal::lpspi::Lpspi<LpspiPins<SDO, SDI, SCK, PCS0>, 1>;
+
+/// LPSPI2 peripheral.
+///
+/// - SDO:  GPIO_SD_B1_08 or GPIO_EMC_02
+/// - SDI:  GPIO_SD_B1_09 or GPIO_EMC_03
+/// - SCK:  GPIO_SD_B1_07 or GPIO_EMC_00
+/// - PCS0: GPIO_SD_B1_06 or GPIO_EMC_01
+///
+/// Use [`lpspi`] to create this driver.
+pub type Lpspi2<SDO, SDI, SCK, PCS0> = hal::lpspi::Lpspi<LpspiPins<SDO, SDI, SCK, PCS0>, 2>;
 
 /// LPSPI3 peripheral.
 ///
@@ -540,6 +568,22 @@ pub type Lpuart8 = hal::lpuart::Lpuart<hal::lpuart::Pins<pins::common::P20, pins
 /// Use [`lpuart`] to create this driver.
 pub type Lpuart1 = hal::lpuart::Lpuart<hal::lpuart::Pins<pins::common::P24, pins::common::P25>, 1>;
 
+/// LPUART7 peripheral.
+///
+/// - Pin 29 is TX.
+/// - Pin 28 is RX.
+///
+/// Use [`lpuart`] to create this driver.
+pub type Lpuart7 = hal::lpuart::Lpuart<hal::lpuart::Pins<pins::common::P29, pins::common::P28>, 7>;
+
+/// LPUART5 peripheral, available on the Teensy 4.1.
+///
+/// - Pin 35 is TX.
+/// - Pin 34 is RX.
+///
+/// Use [`lpuart`] to create this driver.
+pub type Lpuart5 = hal::lpuart::Lpuart<hal::lpuart::Pins<pins::t41::P35, pins::t41::P34>, 5>;
+
 fn prepare_resources<Pins>(
     mut instances: Instances,
     from_pads: impl FnOnce(hal::iomuxc::pads::Pads) -> Pins,
@@ -608,6 +652,8 @@ fn prepare_resources<Pins>(
         pins,
         lpi2c1: instances.LPI2C1,
         lpi2c3: instances.LPI2C3,
+        lpspi1: instances.LPSPI1,
+        lpspi2: instances.LPSPI2,
         lpspi3: instances.LPSPI3,
         lpspi4: instances.LPSPI4,
         lpuart6: instances.LPUART6,
@@ -616,6 +662,8 @@ fn prepare_resources<Pins>(
         lpuart3: instances.LPUART3,
         lpuart8: instances.LPUART8,
         lpuart1: instances.LPUART1,
+        lpuart7: instances.LPUART7,
+        lpuart5: instances.LPUART5,
         flexio1: instances.FLEXIO1,
         flexio2: instances.FLEXIO2,
         flexio3: instances.FLEXIO3,
